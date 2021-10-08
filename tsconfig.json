@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "esnext",                          
+    "module": "CommonJS",                    
+    "lib": ["es6"],                     
+    "allowJs": true,
+    "outDir": "./build",                          
+    "rootDir": "src",
+    "strict": true,
+    "watch": false,         
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
+  },
+  "include": ["src/**/*.ts", "../jsPractice/dirname.ts", "../jsPractice/require.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
