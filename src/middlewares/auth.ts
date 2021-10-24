@@ -7,9 +7,11 @@ export const isAuth: MiddlewareFn<Context> = async ({ context }, next) => {
     if (context.req.user) {
       await next()
     } else {
-      throw new AuthenticationError("You are not authorized for to perform this action")
+      throw new
+      AuthenticationError("You are not authorized for to perform this action")
     }
   } catch (err) {
-    throw new AuthenticationError("You are not authorized for to perform this action")
+    throw new
+    AuthenticationError("You are not authorized for to perform this action")
   }
 }

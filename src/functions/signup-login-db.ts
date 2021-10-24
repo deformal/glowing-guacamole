@@ -27,7 +27,8 @@ export class SignUpAndLoginClient {
         if (!user_data_from_google_tokenId) {
           return { error: true }
         }
-        const user_details: TokenPayload = user_data_from_google_tokenId.getPayload()!
+        const user_details: TokenPayload =
+           user_data_from_google_tokenId.getPayload()!
         return {
           email: user_details.email as string,
           name: user_details.name as string,
@@ -59,7 +60,9 @@ export class SignUpAndLoginClient {
       }
     }
 
-    protected async generate_jwt_refresh_token (userData: User_Cred_for_auth_token)
+    protected async generate_jwt_refresh_token (
+      userData: User_Cred_for_auth_token
+    )
         : Promise<tokens_auth_refresh> {
       try {
         const auth_Token = jwt.sign(
@@ -182,7 +185,9 @@ export class SignUpAndLoginClient {
         const create_refresh_tkn: tokens_auth_refresh = await this
           .generate_jwt_refresh_token(tokenPayload)
 
-        if (create_refresh_tkn.error) { throw new Error("Internal server error") }
+        if (create_refresh_tkn.error) {
+          throw new Error("Internal server error")
+        }
 
         const new_userid_and_auth_token: Signup_Response = {
           userId: userId,

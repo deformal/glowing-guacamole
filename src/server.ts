@@ -1,12 +1,14 @@
 import "reflect-metadata"
 import express from "express"
+import cors from "cors"
 import expressJwt from "express-jwt"
 import { logger } from "./winstonConfig"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import http from "http"
 import { buildSchema } from "type-graphql"
-import { SignupAndLoginResolver } from "./graphql/resolvers/signup_login_resolver"
+import { SignupAndLoginResolver } from
+  "./graphql/resolvers/signup_login_resolver"
 import { ApolloServer } from "apollo-server-express"
 import {
   ApolloServerPluginDrainHttpServer
@@ -24,6 +26,7 @@ app.use(express.json())
 app.use(express.text())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(cors({ origin, credentials: true }))
 app.use(expressJwt({
   secret: process.env.AUTH_TOKEN_SECRET as string,
   algorithms: ["HS256"],
@@ -66,10 +69,12 @@ process.on("SIGTERM", () => process.exit(1));
   await new Promise(() => httpServer.listen(port, () => {
     if (process.env.NODE_ENV === "production") {
       logger.info(
+        // eslint-disable-next-line max-len
         `server is live in production mode on http://localhost:${port}${server.graphqlPath}`
       )
     } else {
       logger.info(
+        // eslint-disable-next-line max-len
         `server is live in development mode on http://localhost:${port}${server.graphqlPath}`
       )
     }

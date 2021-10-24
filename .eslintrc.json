@@ -8,7 +8,7 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 13,
+        "ecmaVersion": "latest",
         "sourceType": "module"
     },
     "plugins": [
@@ -16,6 +16,7 @@
     ],
     "rules": {
         "camelcase": "off",
-        "quotes":["error", "double"]
+        "quotes":["error", "double"],
+        "max-len": ["error", 80]
     }
 }

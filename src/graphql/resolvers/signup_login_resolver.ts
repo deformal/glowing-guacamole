@@ -26,11 +26,37 @@ import {
   , DB_User_Return
   , Context
 } from "../../allTypes"
+import { Request, Response } from "express"
 
 @Resolver(User)
 export class SignupAndLoginResolver extends SignUpAndLoginClient {
-  private async user_continue_value_returner (userId: string, name: string) {
+  private async user_continue_value_returner (
+    userId: string,
+    name:string,
+    res: Response,
+    req: Request
+  ) : Promise<Signup_Response> {
+    const tokens = await this
+      .check_and_generate_tokens_and_login_status(
+        userId!,
+        name!
+      )
 
+    res.header("Authorization", `Bearer ${tokens.authToken}`)
+    res.cookie(
+      "reftkn"
+      , tokens.refreshToken
+      , {
+        httpOnly: true,
+        sameSite: true,
+        path: "/"
+      })
+
+    return {
+      userId: userId,
+      isLoggedIn: true,
+      authToken: tokens.authToken
+    }
   }
 
     // queries GET_USER_DETAILS
@@ -44,9 +70,12 @@ export class SignupAndLoginResolver extends SignUpAndLoginClient {
   ): Promise<DB_User_Return> {
     try {
       const finalId: string = userId || (context.req.user as any).userId
-      const getUserDetails: DB_User_Return = await this.get_a_user_details_from_database(finalId)
+      const getUserDetails: DB_User_Return = await this
+        .get_a_user_details_from_database(finalId)
 
-      if (getUserDetails.error) { throw new Error(getUserDetails.error) }
+      if (getUserDetails.error) {
+        throw new Error(getUserDetails.error)
+      }
 
       return getUserDetails
     } catch (err) {
@@ -61,40 +90,31 @@ export class SignupAndLoginResolver extends SignUpAndLoginClient {
         @Arg("token") token: string,
         @Ctx() context: Context
     )
-        : Promise<Signup_Response | ForbiddenError | UserInputError | AuthenticationError> {
+        : Promise<Signup_Response
+         | ForbiddenError
+          | UserInputError
+           | AuthenticationError> {
       try {
-        const userDataFromGoogleToken: Google_TokenId_Auth_Return_Data = await this
-          .authenticate_user_google_tokenid(token)
+        const userDataFromGoogleToken:
+         Google_TokenId_Auth_Return_Data = await this
+           .authenticate_user_google_tokenid(token)
 
-        if (userDataFromGoogleToken.error) { throw new UserInputError("Invalid Token Received./ Invalid user email") }
+        if (userDataFromGoogleToken.error) {
+          throw new
+          UserInputError("Invalid Token Received./ Invalid user email")
+        }
 
         const is_existing_user: User_Cred_for_auth_token = await this
           .check_for_a_user_in_database_with_email(
                     userDataFromGoogleToken.email as string
           )
-
         // old user
         if (is_existing_user.exists) {
-          const auth_token_userId_name = await this
-            .check_and_generate_tokens_and_login_status(
-                        is_existing_user.userId!,
-                        is_existing_user.name!
-            )
-
-          context.res.header("Authorization", `Bearer ${auth_token_userId_name.authToken}`)
-          context.res.cookie(
-            "reftkn"
-            , auth_token_userId_name.refreshToken
-            , {
-              httpOnly: true,
-              sameSite: true,
-              path: "/"
-            })
-          return {
-            userId: auth_token_userId_name.userId,
-            isLoggedIn: auth_token_userId_name.isLoggedIn,
-            authToken: auth_token_userId_name.authToken
-          }
+          return await this.user_continue_value_returner(
+            is_existing_user.userId!,
+            is_existing_user.name!,
+            context.res,
+            context.req)
         }
         // new user
         const new_user_payload = await this
@@ -103,28 +123,17 @@ export class SignupAndLoginResolver extends SignUpAndLoginClient {
         const create_new_user: User_Cred_for_auth_token = await this
           .add_new_user_in_database(new_user_payload)
 
-        if (create_new_user.error) { throw new Error(`Couldn't create the new user. Reason ${create_new_user}`) }
-
-        const auth_token_userId_name = await this
-          .check_and_generate_tokens_and_login_status(
-                    create_new_user.userId!
-                    , create_new_user.name!
-          )
-
-        // context.res.header('Access-Control-Allow-Origin', context.req.header('origin'));
-        context.res.header("Authorization", `Bearer ${auth_token_userId_name.authToken}`)
-        context.res.cookie("reftkn"
-          , auth_token_userId_name.refreshToken
-          , {
-            httpOnly: true,
-            sameSite: true,
-            path: "/"
-          })
-
-        return {
-          userId: auth_token_userId_name.userId,
-          isLoggedIn: auth_token_userId_name.isLoggedIn
+        if (create_new_user.error) {
+          throw new
+          Error(`Couldn't create the new user. Reason ${create_new_user}`)
         }
+
+        return await this.user_continue_value_returner(
+            create_new_user.userId!,
+            create_new_user.name!,
+            context.res,
+            context.req
+        )
       } catch (err) {
         logger.error(err)
         throw new Error(err as string)
