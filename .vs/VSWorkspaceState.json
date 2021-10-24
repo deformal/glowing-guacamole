@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\prisma",
+    "\\src",
+    "\\src\\functions",
+    "\\src\\graphql",
+    "\\src\\graphql\\resolvers",
+    "\\src\\graphql\\typeDefs"
+  ],
+  "SelectedNode": "\\src\\functions\\signup-login.ts",
+  "PreviewInSolutionExplorer": false
+}

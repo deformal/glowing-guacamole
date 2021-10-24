@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",                          
     "module": "CommonJS",                    
-    "lib": ["es6"],                     
+    "lib": ["es2018", "esnext.asynciterable"],                     
     "allowJs": true,
     "outDir": "./build",                          
     "rootDir": "src",
@@ -11,8 +11,16 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
-  "include": ["src/**/*.ts", "../jsPractice/dirname.ts", "../jsPractice/require.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "noEmit": true,
+  "forceConsistentCasingInFileNames": true,
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "files": [
+    "index.d.ts",
+    "./src/server.ts"
+],
 }
