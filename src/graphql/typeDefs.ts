@@ -9,27 +9,47 @@ export class User {
     @Field({
       nullable: false
     })
-    userId!: string;
+    userId!: String;
 
     @Field({
       nullable: false
     })
-    email!: string;
+    email!: String;
 
     @Field({
       nullable: false
     })
-    givenName!: string;
+    given_name!: String;
+
+    @Field({
+      nullable: false
+    })
+    family_name!: String;
+
+    @Field({
+      nullable: false
+    })
+    nickname!: String;
+
+    @Field({
+      nullable: false
+    })
+    locale!: String;
+
+    @Field({
+      nullable: false
+    })
+    email_verified!: Boolean;
 
     @Field({
       nullable: true
     })
-    imageUrl!: string;
+    picture!: String;
 
     @Field({
       nullable: false
     })
-    name!: string;
+    name!: String;
 
     @Field({
       defaultValue: Date.now()
@@ -49,41 +69,24 @@ export class User {
     @Field({
       nullable: true
     })
-    phone?: string;
+    phone!: String;
 
     @Field({
       nullable: true,
       defaultValue: ""
     })
     @MaxLength(255)
-    bio?: string;
+    bio!: String;
 
     @Field({
       nullable: true
     })
     @MaxLength(255)
-    address?: string;
+    address!: String;
 }
 
 @ObjectType()
 export class Signup_Return {
-    @Field({
-      nullable: true
-    })
-    authToken?: string;
-
-    @Field({
-      nullable: true
-    })
-    isLoggedIn?: boolean;
-
-    @Field({
-      nullable: true
-    })
-    userId?: string;
-
-    @Field({
-      defaultValue: "no error"
-    })
-    error?: string;
+    @Field()
+    userId!: String;
 }

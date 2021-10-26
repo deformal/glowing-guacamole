@@ -1,15 +1,16 @@
 import "reflect-metadata"
 import express from "express"
 import cors from "cors"
-import expressJwt from "express-jwt"
 import { logger } from "./winstonConfig"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import http from "http"
 import { buildSchema } from "type-graphql"
+import { ApolloServer } from "apollo-server-express"
+import { AuthenticationError } from "apollo-server-errors"
+import { jwtCheckMiddleware, correctUserInfo } from "./middlewares/auth"
 import { SignupAndLoginResolver } from
   "./graphql/resolvers/signup_login_resolver"
-import { ApolloServer } from "apollo-server-express"
 import {
   ApolloServerPluginDrainHttpServer
   , ApolloServerPluginLandingPageGraphQLPlayground
@@ -27,11 +28,7 @@ app.use(express.text())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(cors({ origin, credentials: true }))
-app.use(expressJwt({
-  secret: process.env.AUTH_TOKEN_SECRET as string,
-  algorithms: ["HS256"],
-  credentialsRequired: false
-}))
+app.use(jwtCheckMiddleware)
 
 // process related exits
 process.stdout.on("error", (err) => {
@@ -56,7 +53,15 @@ process.on("SIGTERM", () => process.exit(1));
 
   const server = new ApolloServer({
     schema: schema,
-    context: ({ req, res }) => ({ req, res }),
+    context: async ({ req, res }) => {
+      const isValidEmail = await correctUserInfo(req)
+      if (!isValidEmail) {
+        throw new
+        AuthenticationError("Not a valid user/ Try again")
+      }
+      const user = req.user
+      return { req, res, user }
+    },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer }),
       process.env.NODE_ENV === "production"
         ? ApolloServerPluginLandingPageDisabled()
