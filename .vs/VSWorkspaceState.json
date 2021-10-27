@@ -5,9 +5,8 @@
     "\\src",
     "\\src\\functions",
     "\\src\\graphql",
-    "\\src\\graphql\\resolvers",
-    "\\src\\graphql\\typeDefs"
+    "\\src\\graphql\\resolvers"
   ],
-  "SelectedNode": "\\src\\functions\\signup-login.ts",
+  "SelectedNode": "\\src\\graphql\\resolvers\\signup_login_resolver.ts",
   "PreviewInSolutionExplorer": false
 }
