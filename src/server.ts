@@ -12,6 +12,7 @@ import { jwtCheckMiddleware, correctUserInfo } from "./middlewares/auth"
 import { SignupAndLoginResolver } from
   "./graphql/resolvers/signup_login_resolver"
 import { BooksResolver } from "./graphql/resolvers/csvfilesresolvers"
+import { exec } from "child_process"
 import {
   ApolloServerPluginDrainHttpServer
   , ApolloServerPluginLandingPageGraphQLPlayground
@@ -58,15 +59,15 @@ process.on("SIGTERM", () => process.exit(1));
       const isValidEmail = await correctUserInfo(req)
       if (!isValidEmail) {
         throw new
-        AuthenticationError("Not a valid user/ Try again")
+          AuthenticationError("Not a valid user/ Try again")
       }
       const user = req.user
       return { req, res, user }
     },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer }),
-      process.env.NODE_ENV === "production"
-        ? ApolloServerPluginLandingPageDisabled()
-        : ApolloServerPluginLandingPageGraphQLPlayground()
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageDisabled()
+      : ApolloServerPluginLandingPageGraphQLPlayground()
     ]
   })
 
@@ -74,6 +75,13 @@ process.on("SIGTERM", () => process.exit(1));
   server.applyMiddleware({ app, cors: { origin, credentials: true } })
   await new Promise(() => httpServer.listen(port, () => {
     if (process.env.NODE_ENV === "production") {
+      var yourscript = exec("yarn devmigrate",
+        (error, stdout, stderr) => {
+          console.log(stdout)
+          if (error !== null) {
+            console.log(`exec error: ${error}`);
+          }
+        });
       logger.info(
         // eslint-disable-next-line max-len
         `server is live in production mode on http://localhost:${port}${server.graphqlPath}`
