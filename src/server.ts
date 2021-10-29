@@ -4,7 +4,7 @@ import cors from "cors"
 import { logger } from "./winstonConfig"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
-import http from "http"
+import { createServer } from "https"
 import { buildSchema } from "type-graphql"
 import { ApolloServer } from "apollo-server-express"
 import { AuthenticationError } from "apollo-server-errors"
@@ -21,7 +21,7 @@ import {
 
 dotenv.config()
 const app = express()
-const httpServer = http.createServer(app)
+const httpServer = createServer(app)
 const port = process.env.PORT
 const origin = process.env.GOOGLE_AUTH_REDIRECT_URL
 
