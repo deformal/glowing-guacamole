@@ -5,9 +5,9 @@
   "main": "./build/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
-    "build": "tsc -p . && sleep 5 && cp -r ./src/Files ./build/ ",
-    "dist": "yarn javascript-obfuscator ./build  --output ./dist/ --compact false --self-defending true && sleep 5 && cp -r ./build/Files ./dist/ && sleep 2",
-    "reset": "rm -r ./build && sleep 1 && rm -r ./dist",
+    "build": "tsc -p . && cp -r ./src/Files ./build/",
+    "dist": "yarn javascript-obfuscator ./build  --output ./dist/ --compact false --self-defending true && cp -r ./build/Files ./dist/ && cp ./72E062A554B38A5FC1327613280E89C4.txt ./dist/",
+    "reset": "rm -r ./build && rm -r ./dist",
     "prod": "pm2 start ./ecosystem.config.js",
     "stop": "pm2 stop ./ecosystem.config.js",
     "monitor": "pm2 monit",

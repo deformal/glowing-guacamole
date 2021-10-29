@@ -12,8 +12,6 @@ RUN yarn
 
 RUN ./prod.sh
 
-RUN sleep 2
-
 RUN yarn clean
 
 EXPOSE 9000:9000

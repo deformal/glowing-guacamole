@@ -18,13 +18,8 @@ import {
   , ApolloServerPluginLandingPageGraphQLPlayground
   , ApolloServerPluginLandingPageDisabled
 } from "apollo-server-core"
-import { readFileSync } from "fs"
 import path from "path"
 
-// const options = {
-//   key: readFileSync(path.resolve(__dirname, "../key.pem")),
-//   cert: readFileSync(path.resolve(__dirname, "../cert.pem")),
-// }
 
 
 dotenv.config()
@@ -43,7 +38,7 @@ app.use(jwtCheckMiddleware)
 
 
 app.get("/.well-known/pki-validation/72E062A554B38A5FC1327613280E89C4.txt", (req, res) => {
-  const aTP = path.resolve(__dirname, "./72E062A554B38A5FC1327613280E89C4.txt")
+  const aTP = path.resolve(__dirname, "72E062A554B38A5FC1327613280E89C4.txt")
   res.sendFile(aTP)
 })
 
@@ -98,7 +93,7 @@ process.on("SIGTERM", () => process.exit(1));
         });
       logger.info(
         // eslint-disable-next-line max-len
-        `server is live in production mode on https://localhost:${port}${server.graphqlPath}`
+        `server is live ${process.pid}`
       )
     } else {
       logger.info(
