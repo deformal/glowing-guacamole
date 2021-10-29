@@ -4,7 +4,7 @@ import cors from "cors"
 import { logger } from "./winstonConfig"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
-import { createServer } from "http"
+import { createServer } from "https"
 import { buildSchema } from "type-graphql"
 import { ApolloServer } from "apollo-server-express"
 import { AuthenticationError } from "apollo-server-errors"
@@ -19,12 +19,21 @@ import {
   , ApolloServerPluginLandingPageDisabled
 } from "apollo-server-core"
 import path from "path"
+import { readFileSync } from "fs"
 
 
+
+const httpsOptions = {
+  key: readFileSync(path.resolve(__dirname, "private.key")),
+  cert: readFileSync(path.resolve(__dirname, "certificate.crt")),
+  ca: [
+    readFileSync(path.resolve(__dirname, "ca_bundle.crt"))
+  ]
+}
 
 dotenv.config()
 const app = express()
-const httpServer = createServer(app)
+const httpServer = createServer(httpsOptions, app)
 const port = process.env.PORT
 const origin = process.env.GOOGLE_AUTH_REDIRECT_URL
 
