@@ -41,7 +41,8 @@ export const jwtCheckMiddleware = expressJwt({
   }),
   audience: process.env.AUTH0_AUDIENCE,
   issuer: process.env.AUTH0_ISSUER_URI,
-  algorithms: ["RS256"]
+  algorithms: ["RS256"],
+  credentialsRequired: false
 })
 
 export const correctUserInfo = async (req: Request) => {

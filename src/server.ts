@@ -4,7 +4,7 @@ import cors from "cors"
 import { logger } from "./winstonConfig"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
-import { createServer } from "https"
+import { createServer } from "http"
 import { buildSchema } from "type-graphql"
 import { ApolloServer } from "apollo-server-express"
 import { AuthenticationError } from "apollo-server-errors"
@@ -21,15 +21,15 @@ import {
 import { readFileSync } from "fs"
 import path from "path"
 
-const options = {
-  key: readFileSync(path.resolve(__dirname, "../key.pem")),
-  cert: readFileSync(path.resolve(__dirname, "../cert.pem")),
-}
+// const options = {
+//   key: readFileSync(path.resolve(__dirname, "../key.pem")),
+//   cert: readFileSync(path.resolve(__dirname, "../cert.pem")),
+// }
 
 
 dotenv.config()
 const app = express()
-const httpServer = createServer(options, app)
+const httpServer = createServer(app)
 const port = process.env.PORT
 const origin = process.env.GOOGLE_AUTH_REDIRECT_URL
 
@@ -39,6 +39,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(cors({ origin, credentials: true }))
 app.use(jwtCheckMiddleware)
+
+
+
+app.get("/.well-known/pki-validation/72E062A554B38A5FC1327613280E89C4.txt", (req, res) => {
+  const aTP = path.resolve(__dirname, "./72E062A554B38A5FC1327613280E89C4.txt")
+  res.sendFile(aTP)
+})
 
 // process related exits
 process.stdout.on("error", (err) => {
