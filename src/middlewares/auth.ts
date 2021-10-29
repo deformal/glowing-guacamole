@@ -14,7 +14,7 @@ export const isAuth: MiddlewareFn<Context> = async ({ context }, next) => {
     const user = context.req.user
     if (user) {
       const isValidUser = await
-      snpClient.check_for_a_user_in_database_with_email((user as any).email)
+        snpClient.check_for_a_user_in_database_with_email((user as any).email)
 
       if (!isValidUser) {
         throw new Error("Not a valid user/ Try different account")
@@ -22,7 +22,7 @@ export const isAuth: MiddlewareFn<Context> = async ({ context }, next) => {
       await next()
     } else {
       throw new
-      AuthenticationError("You are not authorized for to perform this action")
+        AuthenticationError("You are not authorized for to perform this action")
     }
   } catch (err) {
     const error = new Error()
@@ -41,8 +41,7 @@ export const jwtCheckMiddleware = expressJwt({
   }),
   audience: process.env.AUTH0_AUDIENCE,
   issuer: process.env.AUTH0_ISSUER_URI,
-  algorithms: ["RS256"],
-  credentialsRequired: false
+  algorithms: ["RS256"]
 })
 
 export const correctUserInfo = async (req: Request) => {
