@@ -5,7 +5,7 @@
     "lib": ["es2018", "esnext.asynciterable"],                     
     "allowJs": true,
     "outDir": "./build",                          
-    "rootDir": "src",
+    "rootDir": "./src",
     "strict": true,
     "watch": false,         
     "noImplicitAny": true,
@@ -17,10 +17,7 @@
   },
   "noEmit": true,
   "forceConsistentCasingInFileNames": true,
-  "include": ["src/**/*.ts"],
+  "include": ["./src",],
   "exclude": ["node_modules", "**/*.spec.ts"],
-  "files": [
-    "index.d.ts",
-    "./src/server.ts"
-],
+  "files": [ "./src/server.ts", "./src/allTypes.d.ts"],
 }

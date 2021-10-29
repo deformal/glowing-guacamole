@@ -68,3 +68,48 @@ export type Context = {
     res: Response,
     user: Token_User_Data
 }
+
+export type Book = {
+    title: string,
+    isbn: string,
+    authors: string,
+    description: string
+}
+
+export type Author = {
+    email: string,
+    firstname: string,
+    lastname: string,
+}
+
+export type Mag ={
+    title: string,
+    isbn: string,
+    authors: string,
+    publishedAt: string
+}
+
+export type Combined = {
+    title: string,
+    isbn: string,
+    authors: string,
+    publishedAt: string
+    publishedAt_or_description?: string
+}
+
+export type NewFile = {
+    title: string,
+    isbn: string,
+    authors: string,
+    publishedAt?: string,
+    description?: string
+}
+
+export type MyFilesReturn = {
+    myBooks: Array<string>
+    myMagazines: Array<string>
+}
+
+export type NewBookMagReturnT = {
+    status: boolean
+}

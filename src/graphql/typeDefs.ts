@@ -86,6 +86,87 @@ export class User {
 }
 
 @ObjectType()
+export class Author {
+  @Field()
+  email!: String;
+
+  @Field()
+  firstname!: String;
+
+  @Field()
+  lastname!: String;
+
+  @Field()
+  fullname?: String;
+}
+
+@ObjectType()
+export class Book {
+  @Field()
+  isbn!: String;
+
+  @Field()
+  title!: String;
+
+  @Field()
+  authors!: String;
+
+  @Field()
+  description!: String;
+}
+
+@ObjectType()
+export class Mag {
+  @Field()
+  isbn!: String;
+
+  @Field()
+  title!: String;
+
+  @Field()
+  authors!: String;
+
+  @Field()
+  publishedAt!: String;
+}
+
+@ObjectType()
+export class AllReturn {
+  @Field()
+  title!: String;
+
+  @Field()
+  isbn!: String;
+
+  @Field()
+  authors!: String;
+
+  @Field()
+  description_or_publishedAt!: String;
+}
+
+@ObjectType()
+export class MyFiles {
+  @Field(type => [String])
+  myBooks!: String[];
+
+  @Field(type => [String])
+  myMagazines!: String[];
+}
+
+@ObjectType()
+export class NewBookMagReturn {
+  @Field(type => Boolean)
+  status!: Boolean
+}
+
+@ObjectType()
+export class DeleteBookMagReturn {
+  @Field(type => Boolean)
+  status!: Boolean
+}
+
+@ObjectType()
 export class Signup_Return {
     @Field()
     userId!: String;

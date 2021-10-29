@@ -6,7 +6,6 @@ import jwks from "jwks-rsa"
 import expressJwt from "express-jwt"
 import axios from "axios"
 import { Request } from "express"
-import { logger } from "../winstonConfig"
 
 const snpClient = new SignUpAndLoginClient()
 
@@ -20,7 +19,6 @@ export const isAuth: MiddlewareFn<Context> = async ({ context }, next) => {
       if (!isValidUser) {
         throw new Error("Not a valid user/ Try different account")
       }
-
       await next()
     } else {
       throw new
@@ -43,7 +41,8 @@ export const jwtCheckMiddleware = expressJwt({
   }),
   audience: process.env.AUTH0_AUDIENCE,
   issuer: process.env.AUTH0_ISSUER_URI,
-  algorithms: ["RS256"]
+  algorithms: ["RS256"],
+  credentialsRequired: false
 })
 
 export const correctUserInfo = async (req: Request) => {
@@ -59,7 +58,6 @@ export const correctUserInfo = async (req: Request) => {
     req.user = userInfo
     return true
   } catch (err) {
-    logger.error(err)
     return false
   }
 }

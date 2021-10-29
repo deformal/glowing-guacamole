@@ -53,6 +53,7 @@ export class SignupAndLoginResolver extends SignUpAndLoginClient {
 
     // mutation SIGNUP_OR_CONTINUE
     @Mutation(returns => Signup_Return)
+    @UseMiddleware(isAuth)
     private async create_a_new_account_or_login (
       @Ctx() context: Context,
       @Arg("userId", {

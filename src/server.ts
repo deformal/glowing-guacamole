@@ -11,6 +11,7 @@ import { AuthenticationError } from "apollo-server-errors"
 import { jwtCheckMiddleware, correctUserInfo } from "./middlewares/auth"
 import { SignupAndLoginResolver } from
   "./graphql/resolvers/signup_login_resolver"
+import { BooksResolver } from "./graphql/resolvers/csvfilesresolvers"
 import {
   ApolloServerPluginDrainHttpServer
   , ApolloServerPluginLandingPageGraphQLPlayground
@@ -46,7 +47,7 @@ process.on("SIGTERM", () => process.exit(1));
 // main IEFE
 (async () => {
   const schema = await buildSchema({
-    resolvers: [SignupAndLoginResolver],
+    resolvers: [SignupAndLoginResolver, BooksResolver],
     dateScalarMode: "isoDate",
     authMode: "error"
   })
