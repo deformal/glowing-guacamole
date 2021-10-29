@@ -18,10 +18,18 @@ import {
   , ApolloServerPluginLandingPageGraphQLPlayground
   , ApolloServerPluginLandingPageDisabled
 } from "apollo-server-core"
+import { readFileSync } from "fs"
+import path from "path"
+
+const options = {
+  key: readFileSync(path.resolve(__dirname, "../key.pem")),
+  cert: readFileSync(path.resolve(__dirname, "../cert.pem")),
+}
+
 
 dotenv.config()
 const app = express()
-const httpServer = createServer(app)
+const httpServer = createServer(options, app)
 const port = process.env.PORT
 const origin = process.env.GOOGLE_AUTH_REDIRECT_URL
 
@@ -52,7 +60,6 @@ process.on("SIGTERM", () => process.exit(1));
     dateScalarMode: "isoDate",
     authMode: "error"
   })
-
   const server = new ApolloServer({
     schema: schema,
     context: async ({ req, res }) => {
@@ -84,12 +91,12 @@ process.on("SIGTERM", () => process.exit(1));
         });
       logger.info(
         // eslint-disable-next-line max-len
-        `server is live in production mode on http://localhost:${port}${server.graphqlPath}`
+        `server is live in production mode on https://localhost:${port}${server.graphqlPath}`
       )
     } else {
       logger.info(
         // eslint-disable-next-line max-len
-        `server is live in development mode on http://localhost:${port}${server.graphqlPath}`
+        `server is live in development mode on https://localhost:${port}${server.graphqlPath}`
       )
     }
   }))
