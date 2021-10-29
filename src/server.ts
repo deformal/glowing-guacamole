@@ -4,7 +4,7 @@ import cors from "cors"
 import { logger } from "./winstonConfig"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
-import { createServer } from "https"
+import { createServer } from "http"
 import { buildSchema } from "type-graphql"
 import { ApolloServer } from "apollo-server-express"
 import { AuthenticationError } from "apollo-server-errors"
@@ -18,22 +18,10 @@ import {
   , ApolloServerPluginLandingPageGraphQLPlayground
   , ApolloServerPluginLandingPageDisabled
 } from "apollo-server-core"
-import path from "path"
-import { readFileSync } from "fs"
-
-
-
-const httpsOptions = {
-  key: readFileSync(path.resolve(__dirname, "private.key")),
-  cert: readFileSync(path.resolve(__dirname, "certificate.crt")),
-  ca: [
-    readFileSync(path.resolve(__dirname, "ca_bundle.crt"))
-  ]
-}
 
 dotenv.config()
 const app = express()
-const httpServer = createServer(httpsOptions, app)
+const httpServer = createServer(app)
 const port = process.env.PORT
 const origin = process.env.GOOGLE_AUTH_REDIRECT_URL
 
@@ -46,9 +34,10 @@ app.use(jwtCheckMiddleware)
 
 
 
-app.get("/.well-known/pki-validation/72E062A554B38A5FC1327613280E89C4.txt", (req, res) => {
-  const aTP = path.resolve(__dirname, "72E062A554B38A5FC1327613280E89C4.txt")
-  res.sendFile(aTP)
+app.get("/test", (req, res) => {
+  res.status(200).json({
+    status: "ok"
+  })
 })
 
 // process related exits
@@ -107,7 +96,7 @@ process.on("SIGTERM", () => process.exit(1));
     } else {
       logger.info(
         // eslint-disable-next-line max-len
-        `server is live in development mode on https://localhost:${port}${server.graphqlPath}`
+        `server is live in development mode on http://localhost:${port}${server.graphqlPath}`
       )
     }
   }))
