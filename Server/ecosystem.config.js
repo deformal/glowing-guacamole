@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "chat-rocket",
       script: "./dist/server.js",
-      instances: "3",
+      instances: "4",
       exec_mode: "cluster",
       increment_var: "PORT",
       env: {

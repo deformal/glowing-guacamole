@@ -1,4 +1,5 @@
-import { Heading, Container, Text, Center, Box, Stack } from "@chakra-ui/react"
+import { Heading, Container, Text, Center, Box, Stack, Link } from "@chakra-ui/react"
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 export default function Home() {
     function Feature({ title, desc, ...rest }: any) {
         return (
@@ -37,13 +38,24 @@ export default function Home() {
                     />
                     <Feature
                         title="3) Hosting"
-                        desc="The api server is hosted on Heroku containers and the frontend is hosted on Heroku"
+                        desc="The application is hosted on Digital Ocean Droplet (Docker-Compose)"
                     />
                     <Feature
                         title="4) Future upgrades"
                         desc="Synchronization with Google sheets and Google Drive, Allowing Download of the CSV files, and many more."
                     />
                 </Stack>
+                <br />
+                <Center>
+                    <Link href="https://github.com/deformal/glowing-guacamole" isExternal>
+                        git repository <ExternalLinkIcon mx="2px" />
+                    </Link>
+                </Center>
+                <Center mt="10">
+                    <Text>
+                        version: prod-v-12
+                    </Text>
+                </Center>
             </Container>
         </>
     )
