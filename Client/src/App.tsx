@@ -31,7 +31,10 @@ function App() {
             <Home />
           </Route>
           <Route exact path="/dashboard" >
-            <Dashboard />
+            {isAuthenticated
+              ? <Dashboard />
+              : <Home />
+            }
           </Route>
           <Route exact path="/newfile" >
             {
