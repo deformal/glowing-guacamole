@@ -4,21 +4,12 @@ services:
      image: postgres
      container_name: postgres
      restart: always
-     ports: 
+     ports:
       - 5432:5432
-     environment: 
+     environment:
       POSTGRES_USER: 'drake'
       POSTGRES_PASSWORD: "910330"
       POSTGRES_DB: "csvdb"
-  
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build: ./nginx/
-    ports:
-      - "80:80"
 
   prisma:
     image: prismagraphql/prisma:1.34
@@ -40,23 +31,22 @@ services:
 
   api:
     image: server:latest
-    build: ./server/
-    env_file: ./server/.env
+    build: ./Server/
+    env_file: ./Server/.env
     restart: always
     ports:
       - "9000:9000"
     depends_on:
       - postgres
     networks:
-      - default   
+      - default
 
   client:
     image: client:latest
-    build: ./client/
-    env_file: ./client/.env
+    build: ./Client/
+    env_file: ./Client/.env
     ports:
       - "5000:5000"
     restart: always
     networks:
-      - default 
- 
+      - default
