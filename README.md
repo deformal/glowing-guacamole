@@ -9,13 +9,11 @@ This is a project that reads three csv files which are following:
 This application provieds an interactive ui to be able see the contents of these files. 
 The application requires login via google provided by trusted oAuth provider Auth0.
 
-Server
+Tech stack used
 1. The backend is built using apollo-express and nodejs,
+2. The frontend is built on ReactJS. 
 
-Frontend
-1. The frontedn is built on ReactJS. 
-
-Commands
+Usage steps.
 0. clone the repository.
 1. git clone https://github.com/deformal/glowing-guacamole.git
 2. cd glowing-guacamole
