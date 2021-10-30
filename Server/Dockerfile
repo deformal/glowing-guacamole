@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:16-alpine3.14
 
 RUN mkdir app
 
@@ -10,7 +10,11 @@ COPY ./ ./
 
 RUN yarn 
 
-RUN ./prod.sh
+RUN yarn global add pm2 
+
+RUN yarn build
+
+RUN yarn dist
 
 RUN yarn clean
 

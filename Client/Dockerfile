@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:16-alpine3.14 as builder
 
 RUN mkdir app
 
@@ -8,10 +8,16 @@ COPY package.json ./
 
 COPY ./ ./
 
-RUN yarn 
+RUN npm i 
 
-RUN yarn build
+RUN npm run build
 
-EXPOSE 80:5000
+EXPOSE 5000:5000
 
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
+
+# FROM nginx
+# EXPOSE 5000
+# COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# COPY --from=builder /app/dist /usr/share/nginx/html
+ 

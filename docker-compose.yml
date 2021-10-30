@@ -10,6 +10,15 @@ services:
       POSTGRES_USER: 'drake'
       POSTGRES_PASSWORD: "910330"
       POSTGRES_DB: "csvdb"
+  
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
 
   prisma:
     image: prismagraphql/prisma:1.34
@@ -29,16 +38,25 @@ services:
             migrations: true
             database: "csvdb"
 
-
-  server:
+  api:
     image: server:latest
-    build: ./
+    build: ./server/
+    env_file: ./server/.env
     restart: always
-    env_file: .env
     ports:
       - "9000:9000"
     depends_on:
       - postgres
     networks:
       - default   
+
+  client:
+    image: client:latest
+    build: ./client/
+    env_file: ./client/.env
+    ports:
+      - "5000:5000"
+    restart: always
+    networks:
+      - default 
  
